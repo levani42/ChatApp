@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/id_friendListFragment2">
+    <fragment
+        android:id="@+id/id_friendListFragment2"
+        android:name="com.example.myapplication.Fragments.FriendListFragment"
+        android:label="Chats"
+        tools:layout="@layout/fragment_friend_list" />
+    <fragment
+        android:id="@+id/id_chatListFragment2"
+        android:name="com.example.myapplication.Fragments.ChatListFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_chat_list" />
+</navigation>
