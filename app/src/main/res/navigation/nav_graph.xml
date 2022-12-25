@@ -3,15 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
+    android:label="Profile"
     app:startDestination="@id/id_friendListFragment2">
     <fragment
         android:id="@+id/id_friendListFragment2"
         android:name="com.example.myapplication.Fragments.FriendListFragment"
-        android:label="Chats"
+        android:label="Friend List"
         tools:layout="@layout/fragment_friend_list" />
+    <fragment
+        android:id="@+id/id_requestListFragment2"
+        android:name="com.example.myapplication.Fragments.RequestListFragment"
+        android:label="Request List"
+        tools:layout="@layout/fragment_request_list" />
     <fragment
         android:id="@+id/id_chatListFragment2"
         android:name="com.example.myapplication.Fragments.ChatListFragment"
-        android:label="Profile"
+        android:label="fragment_chat_list"
         tools:layout="@layout/fragment_chat_list" />
 </navigation>

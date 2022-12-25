@@ -6,6 +6,11 @@
         android:id="@+id/id_friendListFragment2"
         android:icon="@drawable/ic_baseline_chat_bubble_24"
         />
+    <item android:title="Requests"
+        android:id="@+id/id_requestListFragment2"
+
+        android:icon="@drawable/ic_baseline_person_add_alt_1_24"
+        />
     <item android:title="Profile"
         android:id="@+id/id_chatListFragment2"
 

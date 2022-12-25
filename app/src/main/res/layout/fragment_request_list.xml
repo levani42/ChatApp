@@ -3,22 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragments.FriendListFragment"
+    tools:context=".Fragments.RequestListFragment"
     android:background="@drawable/bk1">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/refreshProfile"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/userRecyclerView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/userRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/user_layout"/>
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
+        android:layout_height="match_parent"
+        tools:listitem="@layout/user_layout2" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addFriendButton"
@@ -28,8 +20,6 @@
         android:layout_marginRight="24dp"
         android:layout_marginBottom="30dp"
         android:backgroundTint="@color/purple_500"
-        android:src="@drawable/ic_round_add_24"
+        android:src="@drawable/ic_baseline_list_24"
         tools:ignore="SpeakableTextPresentCheck" />
-
-
 </FrameLayout>

@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.bumptech.glide.Glide
 import com.example.myapplication.ChangePassword
 import com.example.myapplication.LoginActivity
 import com.example.myapplication.R
@@ -86,13 +87,13 @@ class ChatListFragment : Fragment() {
         getProfileData()
 
         storageReference = FirebaseStorage.getInstance().reference.child("User/$uid")
-        val localFile = File.createTempFile("tempImage","png")
-        storageReference.getFile(localFile).addOnSuccessListener {
-            val bitmap = BitmapFactory.decodeFile(localFile.absolutePath)
-            imageView.setImageBitmap(bitmap)
+        storageReference.downloadUrl.addOnSuccessListener {Uri->
+            val imageURL = Uri.toString()
 
-        }.addOnFailureListener{
-            Toast.makeText(activity,"Error, While Loading Profile Picture",Toast.LENGTH_SHORT).show()
+            Glide.with(this)
+                .load(imageURL)
+                .into(imageView)
+
         }
 
     }

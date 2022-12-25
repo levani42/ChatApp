@@ -1,15 +1,17 @@
 package com.example.myapplication.Fragments
 
+import android.app.Activity
 import android.content.Intent
-import android.content.Intent.getIntent
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.myapplication.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -18,58 +20,55 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+class RequestListFragment : Fragment() {
 
-class FriendListFragment : Fragment() {
     private lateinit var userRecyclerView : RecyclerView
     private lateinit var userList : ArrayList<User>
-    private lateinit var tempuserList:ArrayList<String>
-    private lateinit var adapter : UserAdapter
+    private lateinit var requestList:ArrayList<String?>
+    private lateinit var adapter : FriendRequestAdapter
     private  var firebaseAuth = FirebaseAuth.getInstance()
-    private  lateinit var  addFriend : FloatingActionButton
-    private var databaseReference = FirebaseDatabase.getInstance().getReference()
+    private lateinit var addFriendButton:FloatingActionButton
 
-    private lateinit var refreshProfile:SwipeRefreshLayout
+    private var databaseReference = FirebaseDatabase.getInstance().getReference()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_friend_list, container, false)
-    }
 
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_request_list, container, false)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         userList = ArrayList()
-        tempuserList=ArrayList()
+        requestList=ArrayList()
 
 
-        addFriend = view.findViewById(R.id.addFriendButton)
-        refreshProfile=view.findViewById(R.id.refreshProfile)
+
+        addFriendButton=view.findViewById(R.id.addFriendButton)
 
         func()
-        func_refresh()
-        userRecyclerView = view.findViewById(R.id.userRecyclerView)
+        userRecyclerView = view.findViewById(R.id.userRecyclerView2)
         userRecyclerView.layoutManager = LinearLayoutManager(activity)
-        adapter = UserAdapter(userList)
+        adapter = FriendRequestAdapter(userList)
         userRecyclerView.adapter = adapter
 
-        databaseReference.child("FriendList").addValueEventListener(object: ValueEventListener{
+
+
+        databaseReference.child("Requests").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
-                tempuserList.clear()
+                requestList.clear()
                 for(postSnapshot in snapshot.children){
-                    val currentUser = postSnapshot.getValue(FriendListUser::class.java)
-
-                    if(currentUser?.friend1==firebaseAuth.currentUser?.uid || currentUser?.friend2==firebaseAuth.currentUser?.uid){
-                        if(currentUser?.friend1==firebaseAuth.currentUser?.uid){tempuserList.add(currentUser?.friend2.toString())}
-                        if(currentUser?.friend2==firebaseAuth.currentUser?.uid){tempuserList.add(currentUser?.friend1.toString())}
-
-
+                    val currentUser = postSnapshot.getValue(SearchUser::class.java)
+                    if(currentUser?.to == firebaseAuth.currentUser?.uid){
+                        requestList.add(currentUser!!.from)
                     }
 
+
                 }
-                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -77,19 +76,21 @@ class FriendListFragment : Fragment() {
             }
 
         })
+
         //gamoaqvs userebi friend recycle view-shi
         databaseReference.child("User").addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 userList.clear()
                 for(postSnapshot in snapshot.children){
                     val currentUser = postSnapshot.getValue(User::class.java)
-
-                    if(firebaseAuth.currentUser?.uid != currentUser?.uid && currentUser?.uid in tempuserList){
+                    if(currentUser?.uid in requestList){
                         userList.add(currentUser!!)
                     }
 
+
                 }
                 adapter.notifyDataSetChanged()
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -99,27 +100,11 @@ class FriendListFragment : Fragment() {
         })
 
     }
-
     private fun func(){
-        addFriend.setOnClickListener {
-            val intent = Intent(activity, AddFriendActivity::class.java)
+        addFriendButton.setOnClickListener{
+            val intent = Intent(activity, MySentRequestsActivity::class.java)
             startActivity(intent)
         }
-
     }
-
-    private fun func_refresh(){
-        refreshProfile.setOnRefreshListener {
-            activity?.finish()
-            startActivity(activity?.intent)
-            activity?.overridePendingTransition(0,0)
-            refreshProfile.isRefreshing=false
-
-        }
-
-
-
-    }
-
 
 }
